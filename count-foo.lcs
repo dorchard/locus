@@ -1,0 +1,13 @@
+data Count (t : Int) a = Count a
+
+plus : Num a => a -> a -> a @ p 
+plus = (+)
+
+tick : Count n a -> Count (n `plus` 1) a
+tick (Count x) = Count x
+
+initCount : Int => IO @ Static
+initCount = 42*6 + 3 + read (getLine)
+
+test : Count initCount String @ p
+test = tick (Count "hello") 
