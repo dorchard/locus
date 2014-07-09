@@ -1,0 +1,42 @@
+{- 
+Console: library for console input and output, which may happen at compile-time,
+run-time, or install-time. 
+-}
+
+module Console where 
+
+class Console (p : Loc)
+      getLine : Console p => () -> String => IO @ p
+      putLine : Console p => String -> () => IO @ p
+
+member Console Static
+      getLine = _ builtin 
+      putLine = _ builtin
+
+member Console Dynamic
+      getLine = _ builtin
+      putLine = _ builtin
+
+member Console Install
+      getLine = _ builtin
+      putLine = _ builtin
+
+
+space examples {
+
+name : Console p => () => IO @ p
+name = let putLine "Please enter your name: "
+           name <- getLine
+           putLine $ "Hello " ++ name
+
+nameStatic = name @ Static
+nameDynamic = name @ Dynamic
+
+nameMixed : () => IO
+nameMixed = let putLine "Developer name: " @ Static
+                dname <- getLine @ Static
+                putLine "User name: " @ Dynamic
+                uname <- getLine @ Dynamic
+                putLine $ "Hello " ++ uname ++ " your code was compiled by " ++ dname
+
+}
